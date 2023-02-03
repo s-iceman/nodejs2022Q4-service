@@ -1,4 +1,11 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -12,7 +19,19 @@ export class UserController {
   }
 
   @Get(':id')
-  getById(@Param('id') id: string) {
-    return this.userService.getUser(id);
+  async getById(@Param('id') id: string) {
+    try {
+      return await this.userService.getUser(id);
+    } catch (err) {
+      if (err instanceof InvalidUuid) {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      } else if (err instanceof UserNotFound) {
+        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException(
+        'Unknown error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

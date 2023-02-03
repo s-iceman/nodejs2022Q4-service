@@ -1,14 +1,17 @@
 import {
   Controller,
   Get,
+  Post,
+  Body,
+  Delete,
   Param,
   HttpException,
   HttpStatus,
-  Post,
-  Body,
+  HttpCode,
+  Put,
 } from '@nestjs/common';
 import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -40,5 +43,36 @@ export class UserController {
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    try {
+      await this.userService.deleteUser(id);
+    } catch (err) {
+      if (err instanceof InvalidUuid) {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      } else if (err instanceof UserNotFound) {
+        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      }
+    }
+  }
+
+  @Put(':id')
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() updatePassword: UpdatePasswordDto,
+  ) {
+    try {
+      console.log(id, updatePassword.newPassword, updatePassword.oldPassword);
+      return await this.userService.updatePassword(id, updatePassword);
+    } catch (err) {
+      if (err instanceof InvalidUuid) {
+        throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
+      } else if (err instanceof UserNotFound) {
+        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      }
+    }
   }
 }

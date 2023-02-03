@@ -3,7 +3,7 @@ import { Database } from '../../database/db.provider';
 import { IUser } from 'src/models/user/user.interface';
 import * as uuid from 'uuid';
 import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -26,5 +26,22 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto) {
     return await this.db.createUsers(createUserDto);
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    if (!uuid.validate(id)) {
+      throw new InvalidUuid();
+    }
+    await this.db.deleteUser(id);
+  }
+
+  async updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<IUser> {
+    if (!uuid.validate(id)) {
+      throw new InvalidUuid();
+    }
+    return await this.db.updatePassword(id, updatePasswordDto);
   }
 }

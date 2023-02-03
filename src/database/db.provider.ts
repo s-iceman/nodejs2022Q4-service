@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { IDatabase } from './db.interface';
 import { IUser, UserPartial } from 'src/models/user/user.interface';
-import { CreateUserDto } from 'src/realization/user/user.dto';
+import {
+  CreateUserDto,
+  UpdatePasswordDto,
+} from 'src/realization/user/user.dto';
 import { generateUuid } from '../common/uuid-helper';
+import { UserNotFound, WrongOldPassword } from 'src/common/exceptions';
 
 @Injectable()
 export class Database implements IDatabase {
@@ -38,6 +42,41 @@ export class Database implements IDatabase {
     };
     this.users.set(id, user);
     return { id, ...this.filterPassword(user) };
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    if (this.users.has(id)) {
+      await this.users.delete(id);
+    } else {
+      throw new UserNotFound(id);
+    }
+  }
+
+  async updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<IUser> {
+    const userData = await this.getUser(id);
+    if (!userData) {
+      throw new UserNotFound(id);
+    }
+
+    if (userData.password !== updatePasswordDto.oldPassword) {
+      throw new WrongOldPassword();
+    }
+
+    const updated = {
+      ...userData,
+      ...{
+        password: updatePasswordDto.newPassword,
+        version: ++userData.version,
+        updatedAt: Date.now(),
+      },
+    };
+    this.users.set(id, updated);
+    return new Promise((resolve) =>
+      resolve({ id, ...this.filterPassword(updated) }),
+    );
   }
 
   private filterPassword({ login, createdAt, updatedAt, version }) {

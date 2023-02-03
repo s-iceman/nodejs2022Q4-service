@@ -4,8 +4,11 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  Post,
+  Body,
 } from '@nestjs/common';
 import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
+import { CreateUserDto } from './user.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -13,9 +16,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  getUsers() {
-    const res = this.userService.getUsers();
-    return res;
+  async getUsers() {
+    return await this.userService.getUsers();
   }
 
   @Get(':id')
@@ -33,5 +35,10 @@ export class UserController {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  @Post()
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.userService.createUser(createUserDto);
   }
 }

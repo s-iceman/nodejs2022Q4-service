@@ -3,6 +3,7 @@ import { Database } from '../../database/db.provider';
 import { IUser } from 'src/models/user/user.interface';
 import * as uuid from 'uuid';
 import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
+import { CreateUserDto } from './user.dto';
 
 @Injectable()
 export class UserService {
@@ -21,5 +22,9 @@ export class UserService {
       throw new UserNotFound(id);
     }
     return user;
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    return await this.db.createUsers(createUserDto);
   }
 }

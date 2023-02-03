@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Database } from '../../database/db.provider';
-import { IUser } from 'src/models/user/user.interface';
+import { IUser } from '../../database/interfaces/user.interface';
 import * as uuid from 'uuid';
 import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';

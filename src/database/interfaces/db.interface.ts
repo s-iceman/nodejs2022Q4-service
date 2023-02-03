@@ -1,13 +1,13 @@
-import { IUser } from '../models/user/user.interface';
+import { IUser } from '../interfaces/user.interface';
 import {
   CreateUserDto,
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
 
-export interface IDatabase {
+export interface IUserDatabase {
   getUsers(): Promise<IUser[]>;
   getUser(id: string): Promise<IUser>;
-  createUsers(createUserDto: CreateUserDto): Promise<IUser | void>;
+  createUsers(createUserDto: CreateUserDto): Promise<IUser>;
   deleteUser(id: string): Promise<void>;
   updatePassword(
     id: string,

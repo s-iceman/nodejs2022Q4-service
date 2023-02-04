@@ -10,10 +10,11 @@ import {
   HttpCode,
   Put,
 } from '@nestjs/common';
-import { InvalidUuid, NotFound } from '../../common/exceptions';
+import { InvalidUuid, NotFound, WrongPassword } from '../../common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
 import { getNotFoundMsg } from '../../common/uuid-helper';
+import { StatusCodes } from 'http-status-codes';
 
 @Controller('user')
 export class UserController {
@@ -44,6 +45,7 @@ export class UserController {
     }
   }
 
+  @HttpCode(HttpStatus.CREATED)
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
     return await this.userService.createUser(createUserDto);
@@ -66,14 +68,14 @@ export class UserController {
     }
   }
 
+  @HttpCode(StatusCodes.OK)
   @Put(':id')
   async updatePassword(
     @Param('id') id: string,
-    @Body() updatePassword: UpdatePasswordDto,
+    @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
     try {
-      console.log(id, updatePassword.newPassword, updatePassword.oldPassword);
-      return await this.userService.updatePassword(id, updatePassword);
+      return await this.userService.updatePassword(id, updatePasswordDto);
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
@@ -82,6 +84,8 @@ export class UserController {
           getNotFoundMsg('User', id),
           HttpStatus.NOT_FOUND,
         );
+      } else if (err instanceof WrongPassword) {
+        throw new HttpException(err.message, HttpStatus.FORBIDDEN);
       }
     }
   }

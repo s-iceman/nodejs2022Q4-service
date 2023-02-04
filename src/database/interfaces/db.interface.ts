@@ -11,7 +11,7 @@ import { CreateArtistDto } from '../../realization/artist/artist.dto';
 interface IUserDatabase {
   getUsers(): Promise<IUser[]>;
   getUser(id: string): Promise<IUser>;
-  createUsers(createUserDto: CreateUserDto): Promise<IUser>;
+  createUser(createUserDto: CreateUserDto): Promise<IUser>;
   deleteUser(id: string): Promise<void>;
   updatePassword(
     id: string,

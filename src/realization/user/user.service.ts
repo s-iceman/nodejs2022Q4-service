@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    return await this.db.createUsers(createUserDto);
+    return await this.db.createUser(createUserDto);
   }
 
   async deleteUser(id: string): Promise<void> {

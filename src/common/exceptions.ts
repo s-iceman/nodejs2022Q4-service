@@ -10,9 +10,9 @@ class NotFound extends Error {
   }
 }
 
-class WrongOldPassword extends Error {
+class WrongPassword extends Error {
   constructor() {
-    super('Old password is wrong. Try again.');
+    super('Password is wrong. Try again.');
   }
 }
 
@@ -22,4 +22,4 @@ class InvalidBooolType extends Error {
   }
 }
 
-export { NotFound, InvalidUuid, WrongOldPassword, InvalidBooolType };
+export { NotFound, InvalidUuid, WrongPassword, InvalidBooolType };

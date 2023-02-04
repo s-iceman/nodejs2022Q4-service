@@ -5,7 +5,7 @@ import {
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
 import { generateUuid } from '../../common/uuid-helper';
-import { NotFound, WrongOldPassword } from 'src/common/exceptions';
+import { NotFound, WrongPassword } from 'src/common/exceptions';
 
 export class UserDatabaseComponent implements IUserDatabase {
   private users: Map<string, UserPartial>;
@@ -29,16 +29,17 @@ export class UserDatabaseComponent implements IUserDatabase {
     );
   }
 
-  async createUsers(createUserDto: CreateUserDto): Promise<IUser> {
+  async createUser(createUserDto: CreateUserDto): Promise<IUser> {
     const id = generateUuid(this.users);
+    const timestamp = Date.now();
     const user = {
       login: createUserDto.login,
       password: createUserDto.password,
       version: 1,
-      createdAt: Date.now(),
-      updatedAt: 0,
+      createdAt: timestamp,
+      updatedAt: timestamp,
     };
-    this.users.set(id, user);
+    await this.users.set(id, user);
     return { id, ...this.filterPassword(user) };
   }
 
@@ -54,22 +55,21 @@ export class UserDatabaseComponent implements IUserDatabase {
     id: string,
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<IUser> {
-    const userData = await this.getUser(id);
+    const userData = this.users.get(id);
     if (!userData) {
       throw new NotFound();
     }
 
     if (userData.password !== updatePasswordDto.oldPassword) {
-      throw new WrongOldPassword();
+      throw new WrongPassword();
     }
 
     const updated = {
-      ...userData,
-      ...{
-        password: updatePasswordDto.newPassword,
-        version: ++userData.version,
-        updatedAt: Date.now(),
-      },
+      login: userData.login,
+      password: updatePasswordDto.newPassword,
+      createdAt: userData.createdAt,
+      version: ++userData.version,
+      updatedAt: Date.now(),
     };
     this.users.set(id, updated);
     return new Promise((resolve) =>

@@ -40,8 +40,8 @@ export class Database
     return await this.users.getUser(id);
   }
 
-  async createUsers(createUserDto: CreateUserDto): Promise<IUser> {
-    return await this.users.createUsers(createUserDto);
+  async createUser(createUserDto: CreateUserDto): Promise<IUser> {
+    return await this.users.createUser(createUserDto);
   }
 
   async deleteUser(id: string): Promise<void> {

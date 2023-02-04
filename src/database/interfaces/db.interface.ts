@@ -1,10 +1,12 @@
-import { IUser } from '../interfaces/user.interface';
+import { IUser } from './user.interface';
+import { IArtist } from './artist.interface';
 import {
   CreateUserDto,
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
+import { CreateArtistDto } from '../../realization/artist/artist.dto';
 
-export interface IUserDatabase {
+interface IUserDatabase {
   getUsers(): Promise<IUser[]>;
   getUser(id: string): Promise<IUser>;
   createUsers(createUserDto: CreateUserDto): Promise<IUser>;
@@ -14,3 +16,12 @@ export interface IUserDatabase {
     updatePasswordDto: UpdatePasswordDto,
   ): Promise<IUser>;
 }
+
+interface IArtistDatabase {
+  getArtists(): Promise<IArtist[]>;
+  getArtist(id: string): Promise<IArtist>;
+  createArtist(createArtistDto: CreateArtistDto): Promise<IArtist>;
+  // deleteArtist(id: string): Promise<void>;
+}
+
+export { IUserDatabase, IArtistDatabase };

@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import { IUserDatabase } from './../interfaces/db.interface';
 import { IUser, UserPartial } from '../interfaces/user.interface';
 import {
@@ -8,7 +7,6 @@ import {
 import { generateUuid } from '../../common/uuid-helper';
 import { UserNotFound, WrongOldPassword } from 'src/common/exceptions';
 
-@Injectable()
 export class UserDatabaseComponent implements IUserDatabase {
   private users: Map<string, UserPartial>;
 

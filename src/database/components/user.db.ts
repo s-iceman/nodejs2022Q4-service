@@ -5,7 +5,7 @@ import {
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
 import { generateUuid } from '../../common/uuid-helper';
-import { UserNotFound, WrongOldPassword } from 'src/common/exceptions';
+import { NotFound, WrongOldPassword } from 'src/common/exceptions';
 
 export class UserDatabaseComponent implements IUserDatabase {
   private users: Map<string, UserPartial>;
@@ -46,7 +46,7 @@ export class UserDatabaseComponent implements IUserDatabase {
     if (this.users.has(id)) {
       await this.users.delete(id);
     } else {
-      throw new UserNotFound(id);
+      throw new NotFound();
     }
   }
 
@@ -56,7 +56,7 @@ export class UserDatabaseComponent implements IUserDatabase {
   ): Promise<IUser> {
     const userData = await this.getUser(id);
     if (!userData) {
-      throw new UserNotFound(id);
+      throw new NotFound();
     }
 
     if (userData.password !== updatePasswordDto.oldPassword) {

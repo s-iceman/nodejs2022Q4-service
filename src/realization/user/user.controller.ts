@@ -10,9 +10,10 @@ import {
   HttpCode,
   Put,
 } from '@nestjs/common';
-import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
+import { InvalidUuid, NotFound } from '../../common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
+import { getNotFoundMsg } from '../../common/uuid-helper';
 
 @Controller('user')
 export class UserController {
@@ -30,8 +31,11 @@ export class UserController {
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      } else if (err instanceof UserNotFound) {
-        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      } else if (err instanceof NotFound) {
+        throw new HttpException(
+          getNotFoundMsg('User', id),
+          HttpStatus.NOT_FOUND,
+        );
       }
       throw new HttpException(
         'Unknown error',
@@ -53,8 +57,11 @@ export class UserController {
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      } else if (err instanceof UserNotFound) {
-        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      } else if (err instanceof NotFound) {
+        throw new HttpException(
+          getNotFoundMsg('User', id),
+          HttpStatus.NOT_FOUND,
+        );
       }
     }
   }
@@ -70,8 +77,11 @@ export class UserController {
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
-      } else if (err instanceof UserNotFound) {
-        throw new HttpException(err.message, HttpStatus.NOT_FOUND);
+      } else if (err instanceof NotFound) {
+        throw new HttpException(
+          getNotFoundMsg('User', id),
+          HttpStatus.NOT_FOUND,
+        );
       }
     }
   }

@@ -1,20 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { IArtistDatabase, IUserDatabase } from './interfaces/db.interface';
+import {
+  IArtistDatabase,
+  ITrackDatabase,
+  IUserDatabase,
+} from './interfaces/db.interface';
 import { IUser } from './interfaces/user.interface';
+import { ITrack } from './interfaces/track.interface';
 import { CreateUserDto, UpdatePasswordDto } from '../realization/user/user.dto';
 import { CreateArtistDto } from '../realization/artist/artist.dto';
 import { UserDatabaseComponent } from './components/user.db';
 import { ArtistDatabaseComponent } from './components/artist.db';
 import { IArtist } from './interfaces/artist.interface';
+import { TrackDatabaseComponent } from './components/track.db';
 
 @Injectable()
-export class Database implements IUserDatabase, IArtistDatabase {
+export class Database
+  implements IUserDatabase, IArtistDatabase, ITrackDatabase
+{
   private users: IUserDatabase;
   private artists: IArtistDatabase;
+  private tracks: ITrackDatabase;
 
   constructor() {
     this.users = new UserDatabaseComponent();
     this.artists = new ArtistDatabaseComponent();
+    this.tracks = new TrackDatabaseComponent();
   }
 
   async getUsers(): Promise<IUser[]> {
@@ -54,5 +64,23 @@ export class Database implements IUserDatabase, IArtistDatabase {
 
   async deleteArtist(id: string): Promise<void> {
     await this.artists.deleteArtist(id);
+  }
+
+  async getTracks(): Promise<ITrack[]> {
+    return await this.tracks.getTracks();
+  }
+
+  async getTrack(id: string): Promise<ITrack> {
+    return await this.tracks.getTrack(id);
+  }
+
+  /*
+  async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
+    return this.artists.createArtist(createArtistDto);
+  }
+  */
+
+  async deleteTrack(id: string): Promise<void> {
+    await this.tracks.deleteTrack(id);
   }
 }

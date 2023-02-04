@@ -21,4 +21,8 @@ function ToBoolean(): (value: any, key: string) => void {
   });
 }
 
-export { generateUuid, ToBoolean };
+const getNotFoundMsg = (key: string, id: string): string => {
+  return `${key} with id=${id} was not found`;
+};
+
+export { generateUuid, ToBoolean, getNotFoundMsg };

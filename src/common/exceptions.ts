@@ -10,18 +10,6 @@ class NotFound extends Error {
   }
 }
 
-class UserNotFound extends Error {
-  constructor(id: string) {
-    super(`User with id=${id} was not found`);
-  }
-}
-
-class ArtistNotFound extends Error {
-  constructor(id: string) {
-    super(`Artist with id=${id} was not found`);
-  }
-}
-
 class WrongOldPassword extends Error {
   constructor() {
     super('Old password is wrong. Try again.');
@@ -34,11 +22,4 @@ class InvalidBooolType extends Error {
   }
 }
 
-export {
-  NotFound,
-  ArtistNotFound,
-  UserNotFound,
-  InvalidUuid,
-  WrongOldPassword,
-  InvalidBooolType,
-};
+export { NotFound, InvalidUuid, WrongOldPassword, InvalidBooolType };

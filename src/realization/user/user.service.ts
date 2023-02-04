@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Database } from '../../database/db.provider';
 import { IUser } from '../../database/interfaces/user.interface';
 import * as uuid from 'uuid';
-import { InvalidUuid, UserNotFound } from 'src/common/exceptions';
+import { InvalidUuid, NotFound } from 'src/common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class UserService {
     }
     const user = await this.db.getUser(id);
     if (!user) {
-      throw new UserNotFound(id);
+      throw new NotFound();
     }
     return user;
   }

@@ -10,29 +10,29 @@ import {
   Body,
 } from '@nestjs/common';
 import { NotFound, InvalidUuid } from './../../common/exceptions';
+// import { CreateArtistDto } from './artist.dto';
+import { TrackService } from './track.service';
 import { getNotFoundMsg } from '../../common/uuid-helper';
-import { CreateArtistDto } from './artist.dto';
-import { ArtistService } from './artist.service';
 
-@Controller('artist')
-export class ArtistController {
-  constructor(private readonly artistService: ArtistService) {}
+@Controller('track')
+export class TrackController {
+  constructor(private readonly trackService: TrackService) {}
 
   @Get()
-  async getArtists() {
-    return await this.artistService.getArtists();
+  async getTracks() {
+    return await this.trackService.getTracks();
   }
 
   @Get(':id')
-  async getArtist(@Param('id') id: string) {
+  async getTrack(@Param('id') id: string) {
     try {
-      return await this.artistService.getArtist(id);
+      return await this.trackService.getTrack(id);
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
       } else if (err instanceof NotFound) {
         throw new HttpException(
-          getNotFoundMsg('Artist', id),
+          getNotFoundMsg('Track', id),
           HttpStatus.NOT_FOUND,
         );
       } else {
@@ -45,21 +45,22 @@ export class ArtistController {
   }
 
   @Post()
-  async createArtist(@Body() createArtistDto: CreateArtistDto) {
-    return this.artistService.createArtist(createArtistDto);
+  async createArtist(@Body() createTrackDto: any) {
+    console.log(createTrackDto);
+    // return await this.trackService.createTrack(createArtistDto);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete(':id')
-  async deleteArtist(@Param('id') id: string) {
+  async deleteTrack(@Param('id') id: string) {
     try {
-      await this.artistService.deleteArtist(id);
+      await this.trackService.deleteTrack(id);
     } catch (err) {
       if (err instanceof InvalidUuid) {
         throw new HttpException(err.message, HttpStatus.BAD_REQUEST);
       } else if (err instanceof NotFound) {
         throw new HttpException(
-          getNotFoundMsg('Artist', id),
+          getNotFoundMsg('Track', id),
           HttpStatus.NOT_FOUND,
         );
       }

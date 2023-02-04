@@ -1,5 +1,6 @@
 import { IUser } from './user.interface';
 import { IArtist } from './artist.interface';
+import { ITrack } from './track.interface';
 import {
   CreateUserDto,
   UpdatePasswordDto,
@@ -24,4 +25,11 @@ interface IArtistDatabase {
   deleteArtist(id: string): Promise<void>;
 }
 
-export { IUserDatabase, IArtistDatabase };
+interface ITrackDatabase {
+  getTracks(): Promise<ITrack[]>;
+  getTrack(id: string): Promise<ITrack>;
+  // createArtist(createArtistDto: CreateArtistDto): Promise<IArtist>;
+  deleteTrack(id: string): Promise<void>;
+}
+
+export { IUserDatabase, IArtistDatabase, ITrackDatabase };

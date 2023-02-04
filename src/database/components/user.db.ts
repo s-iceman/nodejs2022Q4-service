@@ -4,7 +4,7 @@ import {
   CreateUserDto,
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
-import { generateUuid } from '../../common/uuid-helper';
+import { generateUuid } from '../../common/helper';
 import { NotFound, WrongPassword } from 'src/common/exceptions';
 
 export class UserDatabaseComponent implements IUserDatabase {

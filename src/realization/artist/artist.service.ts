@@ -3,7 +3,7 @@ import { InvalidUuid } from 'src/common/exceptions';
 import { Database } from 'src/database/db.provider';
 import { IArtist } from 'src/database/interfaces/artist.interface';
 import { validate } from 'uuid';
-import { CreateArtistDto } from './artist.dto';
+import { ArtistDto } from './artist.dto';
 
 @Injectable()
 export class ArtistService {
@@ -20,7 +20,7 @@ export class ArtistService {
     return await this.db.getArtist(id);
   }
 
-  async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
+  async createArtist(createArtistDto: ArtistDto): Promise<IArtist> {
     return await this.db.createArtist(createArtistDto);
   }
 
@@ -29,5 +29,12 @@ export class ArtistService {
       throw new InvalidUuid();
     }
     await this.db.deleteArtist(id);
+  }
+
+  async updateArtist(id: string, updateArtistDto: ArtistDto): Promise<IArtist> {
+    if (!validate(id)) {
+      throw new InvalidUuid();
+    }
+    return await this.db.updateArtist(id, updateArtistDto);
   }
 }

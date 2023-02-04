@@ -13,7 +13,7 @@ import {
 import { InvalidUuid, NotFound, WrongPassword } from '../../common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
-import { getNotFoundMsg } from '../../common/uuid-helper';
+import { getNotFoundMsg } from '../../common/helper';
 import { StatusCodes } from 'http-status-codes';
 
 @Controller('user')

@@ -1,7 +1,7 @@
 import { AlbumPartial, IAlbum } from '../interfaces/album.interface';
 import { IAlbumDatabase } from '../interfaces/db.interface';
 import { getAll, getElem, deleteElem } from './helper';
-// import { generateUuid } from '../../common/uuid-helper';
+// import { generateUuid } from '../../common/helper';
 
 export class AlbumDatabaseComponent implements IAlbumDatabase {
   private albums: Map<string, AlbumPartial>;

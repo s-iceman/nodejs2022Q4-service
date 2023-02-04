@@ -8,7 +8,7 @@ import {
 import { IUser } from './interfaces/user.interface';
 import { ITrack } from './interfaces/track.interface';
 import { CreateUserDto, UpdatePasswordDto } from '../realization/user/user.dto';
-import { CreateArtistDto } from '../realization/artist/artist.dto';
+import { ArtistDto } from '../realization/artist/artist.dto';
 import { TrackDto } from '../realization/track/track.dto';
 import { UserDatabaseComponent } from './components/user.db';
 import { ArtistDatabaseComponent } from './components/artist.db';
@@ -64,12 +64,16 @@ export class Database
     return await this.artists.getArtist(id);
   }
 
-  async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
+  async createArtist(createArtistDto: ArtistDto): Promise<IArtist> {
     return this.artists.createArtist(createArtistDto);
   }
 
   async deleteArtist(id: string): Promise<void> {
     await this.artists.deleteArtist(id);
+  }
+
+  async updateArtist(id: string, updateArtistDto: ArtistDto): Promise<IArtist> {
+    return await this.artists.updateArtist(id, updateArtistDto);
   }
 
   async getTracks(): Promise<ITrack[]> {

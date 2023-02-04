@@ -1,6 +1,6 @@
 import { v4 } from 'uuid';
 import { Transform, TransformFnParams } from 'class-transformer';
-import { InvalidBooolType } from './exceptions';
+import { InvalidBoolType } from './exceptions';
 
 const generateUuid = (existingValues: Map<string, any>): string => {
   while (true) {
@@ -14,8 +14,8 @@ const generateUuid = (existingValues: Map<string, any>): string => {
 function ToBoolean(): (value: any, key: string) => void {
   return Transform((params: TransformFnParams) => {
     const { value } = params;
-    if (!['true', 'false'].includes(value)) {
-      throw new InvalidBooolType();
+    if (!['true', 'false', true, false].includes(value)) {
+      throw new InvalidBoolType();
     }
     return value === 'true' || value === true;
   });

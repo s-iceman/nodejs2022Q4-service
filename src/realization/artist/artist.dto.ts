@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-import { ToBoolean } from '../../common/uuid-helper';
+import { ToBoolean } from '../../common/helper';
 
-class CreateArtistDto {
+export class ArtistDto {
   @IsString()
   @IsNotEmpty()
   public name: string;
@@ -10,5 +10,3 @@ class CreateArtistDto {
   @ToBoolean()
   public grammy: boolean;
 }
-
-export { CreateArtistDto };

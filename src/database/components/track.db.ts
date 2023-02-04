@@ -2,7 +2,7 @@ import { TrackPartial, ITrack } from '../interfaces/track.interface';
 import { ITrackDatabase } from '../interfaces/db.interface';
 import { getAll, getElem, deleteElem } from './helper';
 import { TrackDto } from 'src/realization/track/track.dto';
-import { generateUuid } from '../../common/uuid-helper';
+import { generateUuid } from '../../common/helper';
 import { NotFound } from 'src/common/exceptions';
 
 export class TrackDatabaseComponent implements ITrackDatabase {

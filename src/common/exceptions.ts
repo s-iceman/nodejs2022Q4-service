@@ -16,10 +16,10 @@ class WrongPassword extends Error {
   }
 }
 
-class InvalidBooolType extends Error {
+class InvalidBoolType extends Error {
   constructor() {
     super('Type of the field is wrong. Must be boolean.');
   }
 }
 
-export { NotFound, InvalidUuid, WrongPassword, InvalidBooolType };
+export { NotFound, InvalidUuid, WrongPassword, InvalidBoolType };

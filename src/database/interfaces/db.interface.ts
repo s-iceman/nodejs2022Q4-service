@@ -6,7 +6,7 @@ import {
   CreateUserDto,
   UpdatePasswordDto,
 } from 'src/realization/user/user.dto';
-import { CreateArtistDto } from '../../realization/artist/artist.dto';
+import { ArtistDto } from '../../realization/artist/artist.dto';
 import { TrackDto } from 'src/realization/track/track.dto';
 
 interface IUserDatabase {
@@ -23,8 +23,9 @@ interface IUserDatabase {
 interface IArtistDatabase {
   getArtists(): Promise<IArtist[]>;
   getArtist(id: string): Promise<IArtist>;
-  createArtist(createArtistDto: CreateArtistDto): Promise<IArtist>;
+  createArtist(createArtistDto: ArtistDto): Promise<IArtist>;
   deleteArtist(id: string): Promise<void>;
+  updateArtist(id: string, updateArtistDto: ArtistDto): Promise<IArtist>;
 }
 
 interface ITrackDatabase {

@@ -1,7 +1,9 @@
 import { TrackPartial, ITrack } from '../interfaces/track.interface';
 import { ITrackDatabase } from '../interfaces/db.interface';
 import { getAll, getElem, deleteElem } from './helper';
-// import { generateUuid } from '../../common/uuid-helper';
+import { TrackDto } from 'src/realization/track/track.dto';
+import { generateUuid } from '../../common/uuid-helper';
+import { NotFound } from 'src/common/exceptions';
 
 export class TrackDatabaseComponent implements ITrackDatabase {
   private tracks: Map<string, TrackPartial>;
@@ -18,15 +20,22 @@ export class TrackDatabaseComponent implements ITrackDatabase {
     return await getElem<ITrack>(this.tracks, id);
   }
 
-  /*
-  async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
-    const id = generateUuid(this.artists);
-    this.artists.set(id, createArtistDto);
-    return { id, ...createArtistDto };
+  async createTrack(createTrackDto: TrackDto): Promise<ITrack> {
+    const id = generateUuid(this.tracks);
+    const data = { artistId: null, albumId: null, ...createTrackDto };
+    this.tracks.set(id, data);
+    return { id, artistId: null, albumId: null, ...createTrackDto };
   }
-  */
 
   async deleteTrack(id: string): Promise<void> {
     await deleteElem<TrackPartial>(this.tracks, id);
+  }
+
+  async updateTrack(id: string, updateTrackDto: TrackDto): Promise<ITrack> {
+    const track = this.tracks.get(id);
+    if (!track) {
+      throw new NotFound();
+    }
+    return { id, ...{ ...track, ...updateTrackDto } };
   }
 }

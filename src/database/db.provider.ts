@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import {
+  IAlbumDatabase,
   IArtistDatabase,
   ITrackDatabase,
   IUserDatabase,
@@ -12,19 +13,23 @@ import { UserDatabaseComponent } from './components/user.db';
 import { ArtistDatabaseComponent } from './components/artist.db';
 import { IArtist } from './interfaces/artist.interface';
 import { TrackDatabaseComponent } from './components/track.db';
+import { AlbumDatabaseComponent } from './components/album.db';
+import { IAlbum } from './interfaces/album.interface';
 
 @Injectable()
 export class Database
-  implements IUserDatabase, IArtistDatabase, ITrackDatabase
+  implements IUserDatabase, IArtistDatabase, ITrackDatabase, IAlbumDatabase
 {
   private users: IUserDatabase;
   private artists: IArtistDatabase;
   private tracks: ITrackDatabase;
+  private albums: IAlbumDatabase;
 
   constructor() {
     this.users = new UserDatabaseComponent();
     this.artists = new ArtistDatabaseComponent();
     this.tracks = new TrackDatabaseComponent();
+    this.albums = new AlbumDatabaseComponent();
   }
 
   async getUsers(): Promise<IUser[]> {
@@ -82,5 +87,17 @@ export class Database
 
   async deleteTrack(id: string): Promise<void> {
     await this.tracks.deleteTrack(id);
+  }
+
+  async getAlbums(): Promise<IAlbum[]> {
+    return await this.albums.getAlbums();
+  }
+
+  async getAlbum(id: string): Promise<IAlbum> {
+    return await this.albums.getAlbum(id);
+  }
+
+  async deleteAlbum(id: string): Promise<void> {
+    await this.albums.deleteAlbum(id);
   }
 }

@@ -51,4 +51,8 @@ export class Database implements IUserDatabase, IArtistDatabase {
   async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
     return this.artists.createArtist(createArtistDto);
   }
+
+  async deleteArtist(id: string): Promise<void> {
+    await this.artists.deleteArtist(id);
+  }
 }

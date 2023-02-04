@@ -28,10 +28,17 @@ class WrongOldPassword extends Error {
   }
 }
 
+class InvalidBooolType extends Error {
+  constructor() {
+    super('Type of the field is wrong. Must be boolean.');
+  }
+}
+
 export {
   NotFound,
   ArtistNotFound,
   UserNotFound,
   InvalidUuid,
   WrongOldPassword,
+  InvalidBooolType,
 };

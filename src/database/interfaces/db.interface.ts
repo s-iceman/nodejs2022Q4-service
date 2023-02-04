@@ -21,7 +21,7 @@ interface IArtistDatabase {
   getArtists(): Promise<IArtist[]>;
   getArtist(id: string): Promise<IArtist>;
   createArtist(createArtistDto: CreateArtistDto): Promise<IArtist>;
-  // deleteArtist(id: string): Promise<void>;
+  deleteArtist(id: string): Promise<void>;
 }
 
 export { IUserDatabase, IArtistDatabase };

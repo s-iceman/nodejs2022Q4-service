@@ -33,6 +33,12 @@ export class ArtistDatabaseComponent implements IArtistDatabase {
   }
 
   async deleteArtist(id: string): Promise<void> {
-    await deleteElem(this.artists, id);
+    try {
+      await deleteElem<ArtistPartial>(this.artists, id);
+    } catch (err) {
+      if (err instanceof NotFound) {
+        throw new ArtistNotFound(id);
+      }
+    }
   }
 }

@@ -23,4 +23,11 @@ export class ArtistService {
   async createArtist(createArtistDto: CreateArtistDto): Promise<IArtist> {
     return await this.db.createArtist(createArtistDto);
   }
+
+  async deleteArtist(id: string): Promise<void> {
+    if (!validate(id)) {
+      throw new InvalidUuid();
+    }
+    await this.db.deleteArtist(id);
+  }
 }

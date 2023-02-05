@@ -34,15 +34,18 @@ export class Database implements IDatabase {
     await this.artists.deleteArtist(id);
     await this.tracks.updateArtistIdInTracks(id, null);
     await this.albums.updateArtistIdInAlbums(id, null);
+    await this.favorites.deleteArtist(id);
   }
 
   async deleteTrack(id: string): Promise<void> {
     await this.tracks.deleteTrack(id);
+    await this.favorites.deleteTrack(id);
   }
 
   async deleteAlbum(id: string): Promise<void> {
     await this.albums.deleteAlbum(id);
     await this.tracks.updateAlbumIdInTracks(id, null);
+    await this.favorites.deleteAlbum(id);
   }
 
   async getFavorites(): Promise<IFavoritesResponse> {

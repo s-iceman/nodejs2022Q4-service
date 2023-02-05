@@ -33,4 +33,16 @@ export class FavoritesDatabaseComponent implements IFavoritesDatabase {
   addArtist(id: string): void {
     this.artists.add(id);
   }
+
+  deleteTrack(id: string): void {
+    this.tracks.delete(id);
+  }
+
+  deleteArtist(id: string): void {
+    this.artists.delete(id);
+  }
+
+  deleteAlbum(id: string): void {
+    this.albums.delete(id);
+  }
 }

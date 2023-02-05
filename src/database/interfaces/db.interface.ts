@@ -63,6 +63,9 @@ interface IFavoritesDatabase {
   addTrack(id: string): void;
   addAlbum(id: string): void;
   addArtist(id: string): void;
+  deleteTrack(id: string): void;
+  deleteAlbum(id: string): void;
+  deleteArtist(id: string): void;
 }
 
 interface IDatabase {

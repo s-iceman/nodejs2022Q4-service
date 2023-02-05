@@ -38,4 +38,14 @@ export class TrackDatabaseComponent implements ITrackDatabase {
     }
     return { id, ...{ ...track, ...updateTrackDto } };
   }
+
+  async updateAlbumIdInTracks(
+    albumId: string,
+    newValue: string | null,
+  ): Promise<void> {
+    const tracks = [...this.tracks].filter(([k, v]) => v.albumId === albumId);
+    tracks.forEach((track) => {
+      this.tracks.set(track[0], { ...track[1], albumId: newValue });
+    });
+  }
 }

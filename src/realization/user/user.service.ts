@@ -10,14 +10,14 @@ export class UserService {
   constructor(private db: Database) {}
 
   async getUsers(): Promise<IUser[]> {
-    return await this.db.getUsers();
+    return await this.db.users.getUsers();
   }
 
   async getUser(id: string): Promise<IUser> {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    const user = await this.db.getUser(id);
+    const user = await this.db.users.getUser(id);
     if (!user) {
       throw new NotFound();
     }
@@ -25,7 +25,7 @@ export class UserService {
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    return await this.db.createUser(createUserDto);
+    return await this.db.users.createUser(createUserDto);
   }
 
   async deleteUser(id: string): Promise<void> {
@@ -42,6 +42,6 @@ export class UserService {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.updatePassword(id, updatePasswordDto);
+    return await this.db.users.updatePassword(id, updatePasswordDto);
   }
 }

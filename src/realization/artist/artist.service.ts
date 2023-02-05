@@ -10,18 +10,18 @@ export class ArtistService {
   constructor(private db: Database) {}
 
   async getArtists(): Promise<IArtist[]> {
-    return await this.db.getArtists();
+    return await this.db.artists.getArtists();
   }
 
   async getArtist(id: string): Promise<IArtist> {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.getArtist(id);
+    return await this.db.artists.getArtist(id);
   }
 
   async createArtist(createArtistDto: ArtistDto): Promise<IArtist> {
-    return await this.db.createArtist(createArtistDto);
+    return await this.db.artists.createArtist(createArtistDto);
   }
 
   async deleteArtist(id: string): Promise<void> {
@@ -35,6 +35,6 @@ export class ArtistService {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.updateArtist(id, updateArtistDto);
+    return await this.db.artists.updateArtist(id, updateArtistDto);
   }
 }

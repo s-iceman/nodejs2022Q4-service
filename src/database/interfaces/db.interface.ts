@@ -8,6 +8,7 @@ import {
 } from 'src/realization/user/user.dto';
 import { ArtistDto } from '../../realization/artist/artist.dto';
 import { TrackDto } from 'src/realization/track/track.dto';
+import { AlbumDto } from 'src/realization/album/album.dto';
 
 interface IUserDatabase {
   getUsers(): Promise<IUser[]>;
@@ -34,13 +35,36 @@ interface ITrackDatabase {
   createTrack(createTrackDto: TrackDto): Promise<ITrack>;
   deleteTrack(id: string): Promise<void>;
   updateTrack(id: string, updateTrackDto: TrackDto): Promise<ITrack>;
+  updateAlbumIdInTracks(
+    albumId: string,
+    newValue: string | null,
+  ): Promise<void>;
 }
 
 interface IAlbumDatabase {
   getAlbums(): Promise<IAlbum[]>;
   getAlbum(id: string): Promise<IAlbum>;
-  // createArtist(createArtistDto: CreateArtistDto): Promise<IArtist>;
+  createAlbum(createAlbumDto: AlbumDto): Promise<IAlbum>;
+  deleteAlbum(id: string): Promise<void>;
+  updateAlbum(id: string, updateAlbumDto: AlbumDto): Promise<IAlbum>;
+}
+
+interface IDatabase {
+  users: IUserDatabase;
+  artists: IArtistDatabase;
+  tracks: ITrackDatabase;
+  albums: IAlbumDatabase;
+
+  deleteUser(id: string): Promise<void>;
+  deleteArtist(id: string): Promise<void>;
+  deleteTrack(id: string): Promise<void>;
   deleteAlbum(id: string): Promise<void>;
 }
 
-export { IUserDatabase, IArtistDatabase, ITrackDatabase, IAlbumDatabase };
+export {
+  IUserDatabase,
+  IArtistDatabase,
+  ITrackDatabase,
+  IAlbumDatabase,
+  IDatabase,
+};

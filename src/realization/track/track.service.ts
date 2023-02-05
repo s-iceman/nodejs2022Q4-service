@@ -10,18 +10,18 @@ export class TrackService {
   constructor(private db: Database) {}
 
   async getTracks(): Promise<ITrack[]> {
-    return await this.db.getTracks();
+    return await this.db.tracks.getTracks();
   }
 
   async getTrack(id: string): Promise<ITrack> {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.getTrack(id);
+    return await this.db.tracks.getTrack(id);
   }
 
   async createTrack(createTrackDto: TrackDto): Promise<ITrack> {
-    return await this.db.createTrack(createTrackDto);
+    return await this.db.tracks.createTrack(createTrackDto);
   }
 
   async deleteTrack(id: string): Promise<void> {
@@ -35,6 +35,6 @@ export class TrackService {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.updateTrack(id, updateTrackDto);
+    return await this.db.tracks.updateTrack(id, updateTrackDto);
   }
 }

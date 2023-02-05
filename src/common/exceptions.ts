@@ -1,24 +1,30 @@
-class InvalidUuid extends Error {
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
+
+class InvalidUuid extends BadRequestException {
   constructor() {
-    super('Invalid id. Must be an uuid type');
+    super({ description: 'Invalid id. Must be an uuid type' });
   }
 }
 
-class NotFound extends Error {
+class NotFound extends NotFoundException {
   constructor() {
-    super('Element was not found');
+    super({ description: 'Element was not found' });
   }
 }
 
-class WrongPassword extends Error {
+class WrongPassword extends ForbiddenException {
   constructor() {
-    super('Password is wrong. Try again.');
+    super({ description: 'Password is wrong. Try again.' });
   }
 }
 
-class InvalidBoolType extends Error {
+class InvalidBoolType extends BadRequestException {
   constructor() {
-    super('Type of the field is wrong. Must be boolean.');
+    super({ description: 'Type of the field is wrong. Must be boolean.' });
   }
 }
 

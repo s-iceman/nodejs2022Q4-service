@@ -1,19 +1,17 @@
+import { Optional } from '@nestjs/common';
+import { IsNotEmpty, IsString, IsInt, IsOptional } from 'class-validator';
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsInt, IsString, IsOptional } from 'class-validator';
 
-export class TrackDto {
-  @IsString()
+export class AlbumDto {
   @IsNotEmpty()
+  @IsString()
   public name: string;
 
   @IsNotEmpty()
   @IsInt()
   @Transform(({ value }) => Number.parseInt(value))
-  public duration: number;
+  public year: number;
 
   @IsOptional()
   public artistId: string | null;
-
-  @IsOptional()
-  public albumId: string | null;
 }

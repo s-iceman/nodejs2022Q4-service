@@ -32,7 +32,7 @@ export class UserService {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    await this.db.deleteUser(id);
+    await this.db.users.deleteUser(id);
   }
 
   async updatePassword(

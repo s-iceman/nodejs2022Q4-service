@@ -32,7 +32,6 @@ export class AlbumService {
   }
 
   async updateAlbum(id: string, updateAlbumDto: AlbumDto): Promise<IAlbum> {
-    console.log('!!! UPDATE');
     if (!validate(id)) {
       throw new InvalidUuid();
     }

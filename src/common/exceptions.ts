@@ -2,6 +2,7 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
+  UnprocessableEntityException,
 } from '@nestjs/common';
 
 class InvalidUuid extends BadRequestException {
@@ -28,4 +29,10 @@ class InvalidBoolType extends BadRequestException {
   }
 }
 
-export { NotFound, InvalidUuid, WrongPassword, InvalidBoolType };
+class InvalidEntity extends UnprocessableEntityException {
+  constructor() {
+    super({ desription: 'Entity with required id is not exists.' });
+  }
+}
+
+export { NotFound, InvalidUuid, WrongPassword, InvalidBoolType, InvalidEntity };

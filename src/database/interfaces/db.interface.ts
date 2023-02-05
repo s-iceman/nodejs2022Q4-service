@@ -9,6 +9,7 @@ import {
 import { ArtistDto } from '../../realization/artist/artist.dto';
 import { TrackDto } from 'src/realization/track/track.dto';
 import { AlbumDto } from 'src/realization/album/album.dto';
+import { IFavorites, IFavoritesResponse } from './favorites.interface';
 
 interface IUserDatabase {
   getUsers(): Promise<IUser[]>;
@@ -57,16 +58,25 @@ interface IAlbumDatabase {
   ): Promise<void>;
 }
 
+interface IFavoritesDatabase {
+  getFavorites(): Promise<IFavorites>;
+  addTrack(id: string): void;
+  addAlbum(id: string): void;
+  addArtist(id: string): void;
+}
+
 interface IDatabase {
   users: IUserDatabase;
   artists: IArtistDatabase;
   tracks: ITrackDatabase;
   albums: IAlbumDatabase;
+  favorites: IFavoritesDatabase;
 
-  deleteUser(id: string): Promise<void>;
   deleteArtist(id: string): Promise<void>;
   deleteTrack(id: string): Promise<void>;
   deleteAlbum(id: string): Promise<void>;
+
+  getFavorites(): Promise<IFavoritesResponse>;
 }
 
 export {
@@ -74,5 +84,6 @@ export {
   IArtistDatabase,
   ITrackDatabase,
   IAlbumDatabase,
+  IFavoritesDatabase,
   IDatabase,
 };

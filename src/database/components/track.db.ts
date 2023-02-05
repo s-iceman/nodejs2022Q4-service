@@ -43,9 +43,21 @@ export class TrackDatabaseComponent implements ITrackDatabase {
     albumId: string,
     newValue: string | null,
   ): Promise<void> {
-    const tracks = [...this.tracks].filter(([k, v]) => v.albumId === albumId);
-    tracks.forEach((track) => {
-      this.tracks.set(track[0], { ...track[1], albumId: newValue });
-    });
+    [...this.tracks]
+      .filter((elem) => elem[1].albumId === albumId)
+      .forEach((track) => {
+        this.tracks.set(track[0], { ...track[1], albumId: newValue });
+      });
+  }
+
+  async updateArtistIdInTracks(
+    artistId: string,
+    newValue: string | null,
+  ): Promise<void> {
+    [...this.tracks]
+      .filter((elem) => elem[1].artistId === artistId)
+      .forEach((track) => {
+        this.tracks.set(track[0], { ...track[1], artistId: newValue });
+      });
   }
 }

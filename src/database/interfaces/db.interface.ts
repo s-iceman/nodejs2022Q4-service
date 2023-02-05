@@ -39,6 +39,10 @@ interface ITrackDatabase {
     albumId: string,
     newValue: string | null,
   ): Promise<void>;
+  updateArtistIdInTracks(
+    artistId: string,
+    newValue: string | null,
+  ): Promise<void>;
 }
 
 interface IAlbumDatabase {
@@ -47,6 +51,10 @@ interface IAlbumDatabase {
   createAlbum(createAlbumDto: AlbumDto): Promise<IAlbum>;
   deleteAlbum(id: string): Promise<void>;
   updateAlbum(id: string, updateAlbumDto: AlbumDto): Promise<IAlbum>;
+  updateArtistIdInAlbums(
+    artistId: string,
+    newValue: string | null,
+  ): Promise<void>;
 }
 
 interface IDatabase {

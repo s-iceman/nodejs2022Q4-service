@@ -28,9 +28,7 @@ export class AlbumDatabaseComponent implements IAlbumDatabase {
   }
 
   async updateAlbum(id: string, updateAlbumDto: AlbumDto): Promise<IAlbum> {
-    console.log('UPDATE', id, JSON.stringify(updateAlbumDto));
     const albumData = this.albums.get(id);
-    console.log(JSON.stringify(albumData));
     if (!albumData) {
       throw new NotFound();
     }
@@ -41,5 +39,16 @@ export class AlbumDatabaseComponent implements IAlbumDatabase {
 
   async deleteAlbum(id: string): Promise<void> {
     await deleteElem<AlbumPartial>(this.albums, id);
+  }
+
+  async updateArtistIdInAlbums(
+    artistId: string,
+    newValue: string,
+  ): Promise<void> {
+    [...this.albums]
+      .filter((elem) => elem[1].artistId === artistId)
+      .forEach((album) => {
+        this.albums.set(album[0], { ...album[1], artistId: newValue });
+      });
   }
 }

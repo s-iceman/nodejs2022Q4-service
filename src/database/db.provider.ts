@@ -31,6 +31,8 @@ export class Database implements IDatabase {
 
   async deleteArtist(id: string): Promise<void> {
     await this.artists.deleteArtist(id);
+    await this.tracks.updateArtistIdInTracks(id, null);
+    await this.albums.updateArtistIdInAlbums(id, null);
   }
 
   async deleteTrack(id: string): Promise<void> {

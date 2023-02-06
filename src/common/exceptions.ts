@@ -13,7 +13,7 @@ class InvalidUuid extends BadRequestException {
 
 class NotFound extends NotFoundException {
   constructor() {
-    super({ description: 'Element was not found' });
+    super({ description: 'Object was not found' });
   }
 }
 

@@ -15,8 +15,7 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: false },
     }),
   );
-  console.log(`!!!! Application is started on port ${port}`);
-  console.log('HELLO!!!');
+  console.log(`Application is started on port ${port}`);
   await app.listen(port);
 }
 bootstrap();

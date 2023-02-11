@@ -2,13 +2,13 @@
 version: '2.2'
 services:
   app:
-    restart: on-failure
+    container_name: ts-node-docker
+    restart: always
     build: .
-    command: npm run start:dev
     ports:
       - ${PORT}:${PORT}
     volumes:
-      - ./nodejs2022Q4-service:/src
+      - ./:/usr/src/app
     depends_on:
       - postgres
 

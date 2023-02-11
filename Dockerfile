@@ -3,5 +3,6 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
+EXPOSE ${PORT}
 RUN npm run build 
-CMD npm start
+CMD ["npm", "run", "start:dev"]

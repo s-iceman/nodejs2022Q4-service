@@ -2,7 +2,7 @@
 version: '2.2'
 services:
   app:
-    container_name: ts-node-docker
+    container_name: lib_app
     restart: always
     build: .
     ports:
@@ -13,6 +13,7 @@ services:
       - postgres
 
   postgres:
+    container_name: lib_database
     build: ./src/database
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}

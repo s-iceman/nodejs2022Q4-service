@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InvalidUuid } from 'src/common/exceptions';
-import { Database } from 'src/database/db.provider';
+import { DatabaseService } from 'src/database/db.provider';
 import { IArtist } from 'src/database/interfaces/artist.interface';
 import { validate } from 'uuid';
 import { ArtistDto } from './artist.dto';
 
 @Injectable()
 export class ArtistService {
-  constructor(private db: Database) {}
+  constructor(private db: DatabaseService) {}
 
   async getArtists(): Promise<IArtist[]> {
     return await this.db.artists.getArtists();

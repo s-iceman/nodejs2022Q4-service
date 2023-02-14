@@ -2,11 +2,11 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { validate } from 'uuid';
 import { InvalidEntity, InvalidUuid, NotFound } from 'src/common/exceptions';
 import { IFavoritesResponse } from 'src/database/interfaces/favorites.interface';
-import { Database } from '../../database/db.provider';
+import { DatabaseService } from '../../database/db.provider';
 
 @Injectable()
 export class FavoritesService {
-  constructor(private db: Database) {}
+  constructor(private db: DatabaseService) {}
 
   async getFavorites(): Promise<IFavoritesResponse> {
     return await this.db.getFavorites();

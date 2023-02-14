@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InvalidUuid } from '../../common/exceptions';
-import { Database } from '../../database/db.provider';
+import { DatabaseService } from '../../database/db.provider';
 import { IAlbum } from '../../database/interfaces/album.interface';
 import { validate } from 'uuid';
 import { AlbumDto } from './album.dto';
 
 @Injectable()
 export class AlbumService {
-  constructor(private db: Database) {}
+  constructor(private db: DatabaseService) {}
 
   async getAlbums(): Promise<IAlbum[]> {
     return await this.db.albums.getAlbums();

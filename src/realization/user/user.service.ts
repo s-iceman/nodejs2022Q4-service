@@ -1,38 +1,50 @@
-import { Injectable } from '@nestjs/common';
-import { Database } from '../../database/db.provider';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { DatabaseService } from '../../database/db.provider';
 import { IUser } from '../../database/interfaces/user.interface';
 import * as uuid from 'uuid';
-import { InvalidUuid, NotFound } from 'src/common/exceptions';
+import { InvalidUuid, NotFound, WrongPassword } from 'src/common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
+import { User } from './user.entity';
 
 @Injectable()
 export class UserService {
-  constructor(private db: Database) {}
+  constructor(private db: DatabaseService) {}
 
   async getUsers(): Promise<IUser[]> {
-    return await this.db.users.getUsers();
+    const users = await this.db.user.findMany();
+    return users.map((e) => ({ ...new User(e) }));
   }
 
   async getUser(id: string): Promise<IUser> {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    const user = await this.db.users.getUser(id);
-    if (!user) {
+    try {
+      const user = await this.db.user.findUnique({ where: { id } });
+      return { ...new User(user) };
+    } catch (err) {
       throw new NotFound();
     }
-    return user;
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    return await this.db.users.createUser(createUserDto);
+    try {
+      const user = await this.db.user.create({ data: createUserDto });
+      return { ...new User(user) };
+    } catch (err) {
+      throw new InternalServerErrorException();
+    }
   }
 
   async deleteUser(id: string): Promise<void> {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    await this.db.users.deleteUser(id);
+    try {
+      const user = await this.db.user.delete({ where: { id } });
+    } catch (err) {
+      throw new NotFound();
+    }
   }
 
   async updatePassword(
@@ -42,6 +54,29 @@ export class UserService {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.users.updatePassword(id, updatePasswordDto);
+    try {
+      const user = await this.db.user.findUnique({
+        where: { id },
+        select: { password: true, version: true },
+      });
+      if (!user) {
+        throw new NotFound();
+      }
+
+      if (user.password !== updatePasswordDto.oldPassword) {
+        throw new WrongPassword();
+      }
+
+      const updatedUser = await this.db.user.update({
+        where: { id },
+        data: {
+          password: updatePasswordDto.newPassword,
+          version: ++user.version,
+        },
+      });
+      return { ...new User(updatedUser) };
+    } catch (err) {
+      throw err;
+    }
   }
 }

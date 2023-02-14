@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InvalidUuid } from '../../common/exceptions';
-import { Database } from '../../database/db.provider';
+import { DatabaseService } from '../../database/db.provider';
 import { ITrack } from '../../database/interfaces/track.interface';
 import { validate } from 'uuid';
 import { TrackDto } from './track.dto';
 
 @Injectable()
 export class TrackService {
-  constructor(private db: Database) {}
+  constructor(private db: DatabaseService) {}
 
   async getTracks(): Promise<ITrack[]> {
     return await this.db.tracks.getTracks();

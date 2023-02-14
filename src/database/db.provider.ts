@@ -13,9 +13,10 @@ import { TrackDatabaseComponent } from './components/track.db';
 import { AlbumDatabaseComponent } from './components/album.db';
 import { FavoritesDatabaseComponent } from './components/favorites.db';
 import { IFavoritesResponse } from './interfaces/favorites.interface';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
-export class Database implements IDatabase {
+export class DatabaseService extends PrismaClient implements IDatabase {
   users: IUserDatabase;
   artists: IArtistDatabase;
   tracks: ITrackDatabase;
@@ -23,6 +24,7 @@ export class Database implements IDatabase {
   favorites: IFavoritesDatabase;
 
   constructor() {
+    super();
     this.users = new UserDatabaseComponent();
     this.artists = new ArtistDatabaseComponent();
     this.tracks = new TrackDatabaseComponent();

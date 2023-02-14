@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InvalidUuid } from '../../common/exceptions';
+import { InvalidUuid, NotFound } from '../../common/exceptions';
 import { DatabaseService } from '../../database/db.provider';
 import { IAlbum } from '../../database/interfaces/album.interface';
 import { validate } from 'uuid';
@@ -10,31 +10,46 @@ export class AlbumService {
   constructor(private db: DatabaseService) {}
 
   async getAlbums(): Promise<IAlbum[]> {
-    return await this.db.albums.getAlbums();
+    return await this.db.album.findMany();
   }
 
   async getAlbum(id: string): Promise<IAlbum> {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.albums.getAlbum(id);
+    try {
+      return await this.db.album.findUniqueOrThrow({ where: { id } });
+    } catch (err) {
+      throw new NotFound();
+    }
   }
 
   async createAlbum(createAlbumDto: AlbumDto): Promise<IAlbum> {
-    return await this.db.albums.createAlbum(createAlbumDto);
+    return await this.db.album.create({ data: createAlbumDto });
   }
 
   async deleteAlbum(id: string): Promise<void> {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    await this.db.deleteAlbum(id);
+    try {
+      await this.db.album.delete({ where: { id } });
+    } catch (err) {
+      throw new NotFound();
+    }
   }
 
   async updateAlbum(id: string, updateAlbumDto: AlbumDto): Promise<IAlbum> {
     if (!validate(id)) {
       throw new InvalidUuid();
     }
-    return await this.db.albums.updateAlbum(id, updateAlbumDto);
+    try {
+      return await this.db.album.update({
+        where: { id },
+        data: updateAlbumDto,
+      });
+    } catch (err) {
+      throw new NotFound();
+    }
   }
 }

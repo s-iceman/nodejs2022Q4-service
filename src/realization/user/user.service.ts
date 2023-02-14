@@ -41,7 +41,7 @@ export class UserService {
       throw new InvalidUuid();
     }
     try {
-      const user = await this.db.user.delete({ where: { id } });
+      await this.db.user.delete({ where: { id } });
     } catch (err) {
       throw new NotFound();
     }

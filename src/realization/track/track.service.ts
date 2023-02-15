@@ -18,7 +18,7 @@ export class TrackService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.track.findUnique({ where: { id }});
+      return await this.db.track.findUnique({ where: { id } });
     } catch (err) {
       throw new NotFound();
     }

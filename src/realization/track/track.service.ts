@@ -28,7 +28,7 @@ export class TrackService {
   }
 
   async createTrack(createTrackDto: TrackDto): Promise<ITrack> {
-    return await this.db.track.create({ data: createTrackDto });
+    return new Track(await this.db.track.create({ data: createTrackDto }));
   }
 
   async deleteTrack(id: string): Promise<void> {
@@ -47,10 +47,12 @@ export class TrackService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.track.update({
-        where: { id },
-        data: { name: updateTrackDto.name },
-      });
+      return new Track(
+        await this.db.track.update({
+          where: { id },
+          data: { name: updateTrackDto.name },
+        }),
+      );
     } catch (err) {
       throw new NotFound();
     }

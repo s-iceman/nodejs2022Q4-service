@@ -28,7 +28,7 @@ export class AlbumService {
   }
 
   async createAlbum(createAlbumDto: AlbumDto): Promise<IAlbum> {
-    return await this.db.album.create({ data: createAlbumDto });
+    return new Album(await this.db.album.create({ data: createAlbumDto }));
   }
 
   async deleteAlbum(id: string): Promise<void> {
@@ -47,10 +47,12 @@ export class AlbumService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.album.update({
-        where: { id },
-        data: updateAlbumDto,
-      });
+      return new Album(
+        await this.db.album.update({
+          where: { id },
+          data: updateAlbumDto,
+        }),
+      );
     } catch (err) {
       throw new NotFound();
     }

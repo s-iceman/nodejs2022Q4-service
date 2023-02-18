@@ -28,7 +28,7 @@ export class ArtistService {
   }
 
   async createArtist(createArtistDto: ArtistDto): Promise<IArtist> {
-    return await this.db.artist.create({ data: createArtistDto });
+    return new Artist(await this.db.artist.create({ data: createArtistDto }));
   }
 
   async deleteArtist(id: string): Promise<void> {
@@ -48,10 +48,12 @@ export class ArtistService {
     }
 
     try {
-      return await this.db.artist.update({
-        where: { id },
-        data: updateArtistDto,
-      });
+      return new Artist(
+        await this.db.artist.update({
+          where: { id },
+          data: updateArtistDto,
+        }),
+      );
     } catch (err) {
       throw new NotFound();
     }

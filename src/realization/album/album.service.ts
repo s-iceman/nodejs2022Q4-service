@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InvalidUuid, NotFound } from '../../common/exceptions';
 import { DatabaseService } from '../../database/db.provider';
 import { IAlbum } from '../../database/interfaces/album.interface';
-import { validate } from 'uuid';
 import { AlbumDto } from './album.dto';
+import { Album } from '../album/album.entity';
+import { validate } from 'uuid';
 
 @Injectable()
 export class AlbumService {
   constructor(private db: DatabaseService) {}
 
   async getAlbums(): Promise<IAlbum[]> {
-    return await this.db.album.findMany();
+    return (await this.db.album.findMany()).map((e) => ({ ...new Album(e) }));
   }
 
   async getAlbum(id: string): Promise<IAlbum> {
@@ -18,7 +19,9 @@ export class AlbumService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.album.findUniqueOrThrow({ where: { id } });
+      return new Album(
+        await this.db.album.findUniqueOrThrow({ where: { id } }),
+      );
     } catch (err) {
       throw new NotFound();
     }

@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InvalidUuid, NotFound } from 'src/common/exceptions';
 import { DatabaseService } from 'src/database/db.provider';
 import { IArtist } from 'src/database/interfaces/artist.interface';
-import { validate } from 'uuid';
 import { ArtistDto } from './artist.dto';
+import { Artist } from './artist.entity';
+import { validate } from 'uuid';
 
 @Injectable()
 export class ArtistService {
   constructor(private db: DatabaseService) {}
 
   async getArtists(): Promise<IArtist[]> {
-    return await this.db.artist.findMany();
+    return (await this.db.artist.findMany()).map((e) => ({ ...new Artist(e) }));
   }
 
   async getArtist(id: string): Promise<IArtist> {
@@ -18,7 +19,9 @@ export class ArtistService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.artist.findUniqueOrThrow({ where: { id } });
+      return new Artist(
+        await this.db.artist.findUniqueOrThrow({ where: { id } }),
+      );
     } catch (err) {
       throw new NotFound();
     }

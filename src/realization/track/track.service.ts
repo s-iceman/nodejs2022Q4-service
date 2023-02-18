@@ -2,15 +2,16 @@ import { Injectable } from '@nestjs/common';
 import { InvalidUuid, NotFound } from '../../common/exceptions';
 import { DatabaseService } from '../../database/db.provider';
 import { ITrack } from '../../database/interfaces/track.interface';
-import { validate } from 'uuid';
 import { TrackDto } from './track.dto';
+import { Track } from './track.entity';
+import { validate } from 'uuid';
 
 @Injectable()
 export class TrackService {
   constructor(private db: DatabaseService) {}
 
   async getTracks(): Promise<ITrack[]> {
-    return await this.db.track.findMany();
+    return (await this.db.track.findMany()).map((e) => ({ ...new Track(e) }));
   }
 
   async getTrack(id: string): Promise<ITrack> {
@@ -18,7 +19,9 @@ export class TrackService {
       throw new InvalidUuid();
     }
     try {
-      return await this.db.track.findUniqueOrThrow({ where: { id } });
+      return new Track(
+        await this.db.track.findUniqueOrThrow({ where: { id } }),
+      );
     } catch (err) {
       throw new NotFound();
     }

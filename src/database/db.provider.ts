@@ -3,10 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class DatabaseService extends PrismaClient {
-  album: any;
-  artist: any;
-  track: any;
-
   constructor() {
     super();
   }

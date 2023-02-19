@@ -14,7 +14,7 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_DEFAULT_PORT}
     volumes:
-      - database-data:/var/lib/postgresql/data
+      - db-data:/var/lib/postgresql/data
 
   app:
     container_name: app
@@ -37,4 +37,4 @@ networks:
    driver: bridge
 
 volumes:
-  database-data:
+  db-data:

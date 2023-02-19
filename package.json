@@ -2,7 +2,7 @@
   "name": "home-library",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Oksana Zavadskaya",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -20,12 +20,15 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "scan:app": "docker scan --accept-license app",
-    "scan:db": "docker scan --accept-license postgres"
+    "scan:db": "docker scan --accept-license postgres",
+    "docker:start": "docker-compose up --build",
+    "docker:stop": "docker-compose down",
+    "start:migrate": "prisma migrate dev && npm run start:dev"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
-    "@nestjs/jwt": "^9.0.0",
+    "@nestjs/jwt": "^10.0.0",
     "@nestjs/mapped-types": "^1.0.1",
     "@nestjs/platform-express": "^8.0.0",
     "@prisma/client": "^4.10.1",

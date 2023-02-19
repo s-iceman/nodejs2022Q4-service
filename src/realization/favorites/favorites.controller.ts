@@ -8,9 +8,7 @@ export class FavoritesController {
 
   @Get()
   async getFavorites() {
-    const res = await this.favoritesService.getFavorites();
-    console.log(res);
-    return res;
+    return await this.favoritesService.getFavorites();
   }
 
   @Post('album/:id')

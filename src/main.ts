@@ -1,8 +1,21 @@
+import { config } from 'dotenv';
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
+  config();
+  const port = process.env.PORT ? +process.env.PORT : 4000;
   const app = await NestFactory.create(AppModule);
-  await app.listen(4000);
+  app.enableCors();
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      transformOptions: { enableImplicitConversion: false },
+    }),
+  );
+  console.log(`Application is started on port ${port}`);
+  await app.listen(port);
 }
 bootstrap();

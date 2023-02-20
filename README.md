@@ -1,71 +1,73 @@
 # Home Library Service
 
-## Prerequisites
-
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+This is a simple service to emulate a home library of music. Users can create, read, update, delete data about Artists, Tracks and Albums, add them to Favorites.
 
 ## Downloading
 
 ```
-git clone {repository URL}
-```
-
-## Installing NPM modules
-
-```
-npm install
+git clone https://github.com/s-iceman/nodejs2022Q4-service.git
+cd nodejs2022Q4-service
+git checkout dev-task2
 ```
 
 ## Running application
 
+To run the application, open terminal and enter:
 ```
-npm start
+npm run docker:start
+```
+Feel free to modify this command in `package.json` and add the flag `-d` if you want to run the application in the background.
+
+Before starting the application you can create `.env` file and set your preferred port for the server (see `.env.example`). By default the application uses port 4000.
+
+After starting the app you can open the API documentation in Swagger Editor: https://editor.swagger.io/. Copy content from `doc/api.yaml` to editor field and change the server address to `http://localhost:{your port}`.
+
+For more information about OpenAPI/Swagger, please visit https://swagger.io/.
+
+Routes:
+- `/user`
+- `/track`
+- `/artist`
+- `/album`
+- `/favs`
+
+Details are provided in `doc/api.yaml`.
+
+To stop the application, use hotkey `Ctrl+C` in the application terminal which is showing the logs, or open a new terminal window and enter:
+```
+npm run docker:stop
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## Testing
 
-After application running open new terminal and enter:
-
-To run all tests without authorization
+After starting the application, open a new terminal window and enter:
 
 ```
-npm run test
+npm run docker:test
 ```
 
-To run only one of all test suites
+## Check codestyle
 
 ```
-npm run test -- <path to suite>
+npm run docker:lint
 ```
 
-To run all test with authorization
+## Scan for vulnerabilities
+
+To scan the application image, open a new terminal window and enter:
 
 ```
-npm run test:auth
+npm run scan:app
 ```
 
-To run only specific test suite with authorization
-
+To scan the database image, enter:
 ```
-npm run test:auth -- <path to suite>
-```
-
-### Auto-fix and format
-
-```
-npm run lint
+npm run scan:db
 ```
 
-```
-npm run format
-```
 
-### Debugging in VSCode
+### Debugging in VS Code
 
 Press <kbd>F5</kbd> to debug.
 

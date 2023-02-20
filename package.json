@@ -23,7 +23,9 @@
     "scan:db": "docker scan --accept-license postgres",
     "docker:start": "docker-compose up --build",
     "docker:stop": "docker-compose down",
-    "start:migrate": "prisma migrate dev && npm run start:dev"
+    "start:migrate": "prisma migrate dev && npm run start:dev",
+    "docker:test": "docker exec app npm run test",
+    "docker:lint": "docker exec app npm run lint"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

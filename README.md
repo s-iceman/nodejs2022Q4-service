@@ -44,19 +44,13 @@ npm run docker:stop
 After starting the application, open a new terminal window and enter:
 
 ```
-npm run test
-```
-
-To run a specific test suite:
-
-```
-npm run test -- <path to suite>
+npm run docker:test
 ```
 
 ## Check codestyle
 
 ```
-npm run lint
+npm run docker:lint
 ```
 
 ## Scan for vulnerabilities

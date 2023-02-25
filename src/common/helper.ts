@@ -25,4 +25,24 @@ const getNotFoundMsg = (key: string, id: string): string => {
   return `${key} with id=${id} was not found`;
 };
 
-export { generateUuid, ToBoolean, getNotFoundMsg };
+function padTo2Digits(num: number): string {
+  return num.toString().padStart(2, '0');
+}
+
+function formatDate(date: Date): string {
+  return (
+    [
+      date.getFullYear(),
+      padTo2Digits(date.getMonth() + 1),
+      padTo2Digits(date.getDate()),
+    ].join('-') +
+    ' ' +
+    [
+      padTo2Digits(date.getHours()),
+      padTo2Digits(date.getMinutes()),
+      padTo2Digits(date.getSeconds()),
+    ].join(':')
+  );
+}
+
+export { generateUuid, ToBoolean, getNotFoundMsg, formatDate };

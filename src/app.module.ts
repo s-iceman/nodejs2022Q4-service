@@ -4,7 +4,8 @@ import { UserModule } from './realization/user/user.module';
 import { AlbumModule } from './realization/album/album.module';
 import { ArtistModule } from './realization/artist/artist.module';
 import { FavoritesModule } from './realization/favorites/favorites.module';
-import { LoggingService } from './common/logger/logger.service';
+import { HttpMiddleware } from './middlewares/http.middleware';
+import { LoggerModule } from './logger/logger.module';
 
 @Module({
   imports: [
@@ -13,10 +14,11 @@ import { LoggingService } from './common/logger/logger.service';
     TrackModule,
     AlbumModule,
     FavoritesModule,
+    LoggerModule,
   ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(LoggingService).forRoutes('*');
+    consumer.apply(HttpMiddleware).forRoutes('*');
   }
 }

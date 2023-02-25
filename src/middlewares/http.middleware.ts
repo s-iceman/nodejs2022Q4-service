@@ -1,18 +1,16 @@
-import { Injectable, Logger, NestMiddleware } from '@nestjs/common';
+import { Injectable, NestMiddleware, Logger } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { formatDate } from '../helper';
+import { LoggingService } from '../logger/logger.service';
 
 @Injectable()
-export class LoggingService implements NestMiddleware {
-  private logger = new Logger('HTTP');
+export class HttpMiddleware implements NestMiddleware {
+  constructor(private readonly logger: LoggingService) {}
 
   use(request: Request, response: Response, next: NextFunction): void {
     const { method, params, protocol, originalUrl, body } = request;
     const url = `${protocol}://${request.get('Host')}${originalUrl}`;
     this.logger.log(
-      `[${formatDate(
-        new Date(),
-      )}] [REQUEST:] [${url}] ${method} with params "${JSON.stringify(
+      `[REQUEST:] [${url}] ${method} with params "${JSON.stringify(
         Object.values(params),
       )}" and body ${JSON.stringify(body)}`,
     );
@@ -28,9 +26,7 @@ export class LoggingService implements NestMiddleware {
     response.on('close', () => {
       const { statusCode } = response;
       this.logger.log(
-        `[${formatDate(
-          new Date(),
-        )}] [RESPONSE:] [${method}] with body ${resBody} result ${statusCode}`,
+        `[RESPONSE:] [${method}] with body ${resBody} result ${statusCode}`,
       );
     });
     next();

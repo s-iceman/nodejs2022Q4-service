@@ -11,12 +11,12 @@ import { LoggingService } from 'src/logger/logger.service';
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(private readonly logger: LoggingService) {}
 
-  catch(exception: HttpException, host: ArgumentsHost) {
+  async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const status = exception.getStatus();
-    this.logger.error(
+    await this.logger.error(
       `[${status}] Exception ${exception.name} with message "${exception.message}"`,
     );
 

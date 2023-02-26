@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.7'
 services:
   postgres:
     container_name: postgres
@@ -28,7 +28,8 @@ services:
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
-      - ./logs:/usr/src/logs
+      - ./logs:/usr/src/app/logs
+      - ./error-logs:/usr/src/app/error-logs
     depends_on:
       - postgres
 

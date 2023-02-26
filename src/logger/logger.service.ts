@@ -3,6 +3,7 @@ import { formatDate } from 'src/common/helper';
 import { join } from 'node:path';
 import { FileHandle, stat, open, mkdir, rename } from 'node:fs/promises';
 import { Mutex } from 'async-mutex';
+import { LOG_LEVELS } from './constants';
 
 const BYTES_PER_KB = 1024;
 const DEFAULT_SIZE = 10;
@@ -19,12 +20,18 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
   errorLog: ILog;
   maxFileSize: number;
   mutex: Mutex;
+  maxLogLevel: number;
 
   constructor() {
     this.messageLog = { handle: undefined, file: '', isError: false };
     this.errorLog = { handle: undefined, file: '', isError: true };
+
     const fileSizeInKBytes = +process.env.MAX_LOG_FILE_SIZE || DEFAULT_SIZE;
     this.maxFileSize = fileSizeInKBytes * BYTES_PER_KB;
+
+    const maxLogLevel = +process.env.MAX_LOG_LEVEL;
+    this.maxLogLevel = maxLogLevel ?? Object.keys(LOG_LEVELS).length;
+
     this.mutex = new Mutex();
   }
 
@@ -34,18 +41,28 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
   }
 
   async log(message: any): Promise<void> {
+    if (!this.isLogAvailable(this.log.name)) {
+      return;
+    }
     const fullMsg = this.createFullMessage(message, 'LOG');
     console.log(fullMsg);
     await this.write(fullMsg, this.messageLog);
   }
 
   async warn(message: any): Promise<void> {
+    if (!this.isLogAvailable(this.warn.name)) {
+      return;
+    }
     const fullMsg = this.createFullMessage(message, 'WARNING');
     console.warn(fullMsg);
     await this.write(fullMsg, this.messageLog);
   }
 
   async error(message: any): Promise<void> {
+    if (!this.isLogAvailable(this.error.name)) {
+      return;
+    }
+    console.log('!!!!!!!!!! ERROR');
     const fullMsg = this.createFullMessage(message, 'ERROR');
     console.error(fullMsg);
     await this.write(fullMsg, this.messageLog);
@@ -53,12 +70,18 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
   }
 
   async debug(message: any): Promise<void> {
+    if (!this.isLogAvailable(this.debug.name)) {
+      return;
+    }
     const fullMsg = this.createFullMessage(message, 'DEBUG');
     console.debug(fullMsg);
     await this.write(fullMsg, this.messageLog);
   }
 
   async verbose(message: any, ...optionalParams: any[]): Promise<void> {
+    if (!this.isLogAvailable(this.verbose.name)) {
+      return;
+    }
     const fullMsg = this.createFullMessage(message, 'VERBOSE');
     console.log(fullMsg, optionalParams);
     await this.write(fullMsg, this.messageLog);
@@ -79,12 +102,10 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
         const fileLen = stats.size + Buffer.byteLength(fullMsg, 'utf8');
         if (fileLen >= this.maxFileSize) {
           await log.handle.close();
-          console.log('\n BEFORE RENAME');
           await rename(log.file, log.file.replace('.log', '.old.log'));
           await this.initFileHandle(log);
         }
       }
-      console.log('\nWrite');
       await log.handle.writeFile(fullMsg + '\n');
     } finally {
       release();
@@ -102,7 +123,6 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
 
   private async closeFilehandle(log: ILog): Promise<void> {
     if (log.handle) {
-      log.handle.write('CLOSE!!!!!!!!!!!!');
       await log.handle.close();
       log.handle = undefined;
       log.file = '';
@@ -122,5 +142,9 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
     } catch (err) {
       return false;
     }
+  }
+
+  private isLogAvailable(methodName: string): boolean {
+    return LOG_LEVELS[methodName] <= this.maxLogLevel;
   }
 }

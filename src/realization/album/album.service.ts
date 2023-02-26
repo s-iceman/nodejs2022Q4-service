@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InvalidUuid, NotFound } from '../../common/exceptions';
+import { InvalidUuid, AlbumNotFound } from '../../common/exceptions';
 import { DatabaseService } from '../../database/db.provider';
 import { IAlbum } from '../../database/interfaces/album.interface';
 import { AlbumDto } from './album.dto';
@@ -23,7 +23,7 @@ export class AlbumService {
         await this.db.album.findUniqueOrThrow({ where: { id } }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new AlbumNotFound();
     }
   }
 
@@ -38,7 +38,7 @@ export class AlbumService {
     try {
       await this.db.album.delete({ where: { id } });
     } catch (err) {
-      throw new NotFound();
+      throw new AlbumNotFound();
     }
   }
 
@@ -54,7 +54,7 @@ export class AlbumService {
         }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new AlbumNotFound();
     }
   }
 }

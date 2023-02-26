@@ -2,6 +2,8 @@ import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/exception.filter';
+import { LoggingService } from './logger/logger.service';
 
 async function bootstrap() {
   config();
@@ -15,7 +17,9 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: false },
     }),
   );
-  console.log(`Application is started on port ${port}`);
+  const logger = <LoggingService>app.get(LoggingService);
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
+  logger.log(`Application is started on port ${port}`);
   await app.listen(port);
 }
 bootstrap();

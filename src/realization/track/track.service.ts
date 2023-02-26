@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InvalidUuid, NotFound } from '../../common/exceptions';
+import { InvalidUuid, TrackNotFound } from '../../common/exceptions';
 import { DatabaseService } from '../../database/db.provider';
 import { ITrack } from '../../database/interfaces/track.interface';
 import { TrackDto } from './track.dto';
@@ -23,7 +23,7 @@ export class TrackService {
         await this.db.track.findUniqueOrThrow({ where: { id } }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new TrackNotFound();
     }
   }
 
@@ -38,7 +38,7 @@ export class TrackService {
     try {
       await this.db.track.delete({ where: { id } });
     } catch (err) {
-      throw new NotFound();
+      throw new TrackNotFound();
     }
   }
 
@@ -54,7 +54,7 @@ export class TrackService {
         }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new TrackNotFound();
     }
   }
 }

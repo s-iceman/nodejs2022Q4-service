@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InvalidUuid, NotFound } from 'src/common/exceptions';
+import { InvalidUuid, ArtistNotFound } from 'src/common/exceptions';
 import { DatabaseService } from 'src/database/db.provider';
 import { IArtist } from 'src/database/interfaces/artist.interface';
 import { ArtistDto } from './artist.dto';
@@ -23,7 +23,7 @@ export class ArtistService {
         await this.db.artist.findUniqueOrThrow({ where: { id } }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new ArtistNotFound();
     }
   }
 
@@ -38,7 +38,7 @@ export class ArtistService {
     try {
       await this.db.artist.delete({ where: { id } });
     } catch (err) {
-      throw new NotFound();
+      throw new ArtistNotFound();
     }
   }
 
@@ -55,7 +55,7 @@ export class ArtistService {
         }),
       );
     } catch (err) {
-      throw new NotFound();
+      throw new ArtistNotFound();
     }
   }
 }

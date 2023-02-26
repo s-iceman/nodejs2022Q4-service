@@ -2,7 +2,7 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { DatabaseService } from '../../database/db.provider';
 import { IUser } from '../../database/interfaces/user.interface';
 import * as uuid from 'uuid';
-import { InvalidUuid, NotFound, WrongPassword } from 'src/common/exceptions';
+import { InvalidUuid, UserNotFound, WrongPassword } from 'src/common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { User } from './user.entity';
 
@@ -23,7 +23,7 @@ export class UserService {
       const user = await this.db.user.findUnique({ where: { id } });
       return { ...new User(user) };
     } catch (err) {
-      throw new NotFound();
+      throw new UserNotFound();
     }
   }
 
@@ -43,7 +43,7 @@ export class UserService {
     try {
       await this.db.user.delete({ where: { id } });
     } catch (err) {
-      throw new NotFound();
+      throw new UserNotFound();
     }
   }
 
@@ -60,7 +60,7 @@ export class UserService {
         select: { password: true, version: true },
       });
       if (!user) {
-        throw new NotFound();
+        throw new UserNotFound();
       }
 
       if (user.password !== updatePasswordDto.oldPassword) {

@@ -23,8 +23,8 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
   maxLogLevel: number;
 
   constructor() {
-    this.messageLog = { handle: undefined, file: '', isError: false };
-    this.errorLog = { handle: undefined, file: '', isError: true };
+    this.messageLog = { handle: undefined, file: 'logs', isError: false };
+    this.errorLog = { handle: undefined, file: 'errors', isError: true };
 
     const fileSizeInKBytes = +process.env.MAX_LOG_FILE_SIZE || DEFAULT_SIZE;
     this.maxFileSize = fileSizeInKBytes * BYTES_PER_KB;
@@ -62,7 +62,7 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
     if (!this.isLogAvailable(this.error.name)) {
       return;
     }
-    console.log('!!!!!!!!!! ERROR');
+
     const fullMsg = this.createFullMessage(message, 'ERROR');
     console.error(fullMsg);
     await this.write(fullMsg, this.messageLog);
@@ -102,11 +102,14 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
         const fileLen = stats.size + Buffer.byteLength(fullMsg, 'utf8');
         if (fileLen >= this.maxFileSize) {
           await log.handle.close();
-          await rename(log.file, log.file.replace('.log', '.old.log'));
+          await rename(
+            log.file,
+            log.file.replace('.log', `${Date.now()}.old.log`),
+          );
           await this.initFileHandle(log);
         }
       }
-      await log.handle.writeFile(fullMsg + '\n');
+      await log.handle.appendFile(fullMsg + '\n');
     } finally {
       release();
     }
@@ -114,10 +117,10 @@ export class LoggingService implements LoggerService, OnModuleDestroy {
 
   private async initFileHandle(log: ILog): Promise<void> {
     const dirName = log.isError ? 'error-logs' : 'logs';
-    const timestamp = Date.now();
     await this.createDirIfNotExists(dirName);
-    const fullpath = join(`./${dirName}`, timestamp.toString() + '.log');
-    log.handle = await open(fullpath, 'w');
+    log.file = log.isError ? 'errors' : 'logs';
+    const fullpath = join(`./${dirName}`, `${log.file}.log`);
+    log.handle = await open(fullpath, 'a');
     log.file = fullpath;
   }
 

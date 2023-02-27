@@ -1,8 +1,8 @@
 import { config } from 'dotenv';
 import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/exception.filter';
+import { AllExceptionsFilter } from './common/exception.filter';
 import { LoggingService } from './logger/logger.service';
 
 async function bootstrap() {
@@ -18,9 +18,21 @@ async function bootstrap() {
       transformOptions: { enableImplicitConversion: false },
     }),
   );
+
   const logger = <LoggingService>app.get(LoggingService);
-  app.useGlobalFilters(new HttpExceptionFilter(logger));
-  logger.log(`Application is started on port ${port}`);
+  const httpAdapterHost = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(logger, httpAdapterHost));
+  logger.debug(`Application is started on port ${port}`);
+
+  process.on('unhandledRejection', async (err) => {
+    await logger.error(`Unhandled Rejection ${err}`);
+  });
+
+  process.on('uncaughtException', async (exc) => {
+    await logger.error(`Uncaught Rejection ${exc.name} ${exc.message}`);
+    process.exit(1);
+  });
+
   await app.listen(port);
 }
 bootstrap();

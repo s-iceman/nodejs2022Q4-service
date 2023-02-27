@@ -7,7 +7,7 @@ This is a simple service to emulate a home library of music. Users can create, r
 ```
 git clone https://github.com/s-iceman/nodejs2022Q4-service.git
 cd nodejs2022Q4-service
-git checkout dev-task2
+git checkout dev-task3
 ```
 
 ## Running application

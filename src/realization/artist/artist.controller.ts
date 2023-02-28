@@ -8,11 +8,14 @@ import {
   Delete,
   Body,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ArtistDto } from './artist.dto';
 import { ArtistService } from './artist.service';
+import { AtGuard } from '../auth/auth.guard';
 
 @Controller('artist')
+@UseGuards(AtGuard)
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 

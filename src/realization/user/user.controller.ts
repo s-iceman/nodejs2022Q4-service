@@ -8,12 +8,15 @@ import {
   HttpStatus,
   HttpCode,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
 import { StatusCodes } from 'http-status-codes';
+import { AtGuard } from '../auth/auth.guard';
 
 @Controller('user')
+@UseGuards(AtGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 

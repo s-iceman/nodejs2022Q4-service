@@ -3,12 +3,14 @@ import { DatabaseService } from '../../database/db.provider';
 import { IUser } from '../../database/interfaces/user.interface';
 import * as uuid from 'uuid';
 import {
+  AuthFailed,
   InvalidUuid,
   UserNotFound,
   WrongPassword,
 } from 'src/common/exceptions';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { User } from './user.entity';
+import { isPasswordsEqual, hashPassword } from 'src/common/password-helper';
 
 @Injectable()
 export class UserService {
@@ -31,9 +33,28 @@ export class UserService {
     }
   }
 
+  async validateUser(createUserDto: CreateUserDto): Promise<any> {
+    const { login, password } = createUserDto;
+    const user = await this.db.user.findFirst({ where: { login } });
+    if (!user) {
+      throw new AuthFailed();
+    }
+
+    const isValid = await isPasswordsEqual(password, user.password);
+    if (!isValid) {
+      throw new AuthFailed();
+    }
+
+    return { ...new User(user) };
+  }
+
   async createUser(createUserDto: CreateUserDto) {
     try {
-      const user = await this.db.user.create({ data: createUserDto });
+      const password = await hashPassword(createUserDto.password);
+      console.log(password);
+      const user = await this.db.user.create({
+        data: { login: createUserDto.login, password: password },
+      });
       return { ...new User(user) };
     } catch (err) {
       throw new InternalServerErrorException();
@@ -67,14 +88,18 @@ export class UserService {
         throw new UserNotFound();
       }
 
-      if (user.password !== updatePasswordDto.oldPassword) {
+      const isEqual = isPasswordsEqual(
+        updatePasswordDto.oldPassword,
+        user.password,
+      );
+      if (!isEqual) {
         throw new WrongPassword();
       }
 
       const updatedUser = await this.db.user.update({
         where: { id },
         data: {
-          password: updatePasswordDto.newPassword,
+          password: await hashPassword(updatePasswordDto.newPassword),
           version: ++user.version,
         },
       });

@@ -8,11 +8,14 @@ import {
   Delete,
   Body,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumDto } from './album.dto';
 import { AlbumService } from './album.service';
+import { AtGuard } from '../auth/auth.guard';
 
 @Controller('album')
+@UseGuards(AtGuard)
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 

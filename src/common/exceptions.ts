@@ -59,6 +59,12 @@ class UserNotFound extends NotFoundException {
   }
 }
 
+class AuthFailed extends ForbiddenException {
+  constructor() {
+    super('Authentification failed. Try again.');
+  }
+}
+
 export {
   AlbumNotFound,
   ArtistNotFound,
@@ -69,4 +75,5 @@ export {
   WrongPassword,
   InvalidBoolType,
   InvalidEntity,
+  AuthFailed,
 };

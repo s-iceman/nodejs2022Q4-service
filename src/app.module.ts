@@ -8,6 +8,7 @@ import { HttpMiddleware } from './middlewares/http.middleware';
 import { LoggerModule } from './logger/logger.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './common/exception.filter';
+import { AuthModule } from './realization/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,8 +18,14 @@ import { AllExceptionsFilter } from './common/exception.filter';
     AlbumModule,
     FavoritesModule,
     LoggerModule,
+    AuthModule,
   ],
-  providers: [{ provide: APP_FILTER, useClass: AllExceptionsFilter }],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionsFilter,
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {

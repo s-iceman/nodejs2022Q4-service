@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { StatusCodes } from 'http-status-codes';
-import { AtGuard } from '../auth/auth.guard';
+import { AtGuard } from '../guards/auth.guard';
 import { FavoritesService } from './favorites.service';
 
 @Controller('favs')

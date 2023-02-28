@@ -13,7 +13,7 @@ import {
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 import { UserService } from './user.service';
 import { StatusCodes } from 'http-status-codes';
-import { AtGuard } from '../auth/auth.guard';
+import { AtGuard } from '../guards/auth.guard';
 
 @Controller('user')
 @UseGuards(AtGuard)

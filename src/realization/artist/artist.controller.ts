@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ArtistDto } from './artist.dto';
 import { ArtistService } from './artist.service';
-import { AtGuard } from '../auth/auth.guard';
+import { AtGuard } from '../guards/auth.guard';
 
 @Controller('artist')
 @UseGuards(AtGuard)

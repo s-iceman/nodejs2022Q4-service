@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { AlbumDto } from './album.dto';
 import { AlbumService } from './album.service';
-import { AtGuard } from '../auth/auth.guard';
+import { AtGuard } from '../guards/auth.guard';
 
 @Controller('album')
 @UseGuards(AtGuard)

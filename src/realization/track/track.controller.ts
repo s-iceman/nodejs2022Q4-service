@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { TrackService } from './track.service';
 import { TrackDto } from './track.dto';
-import { AtGuard } from '../auth/auth.guard';
+import { AtGuard } from '../guards/auth.guard';
 
 @Controller('track')
 @UseGuards(AtGuard)

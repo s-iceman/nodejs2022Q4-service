@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  postgres:
+    container_name: postgres
+    image: postgres
+    build: ./src/database
+    restart: always
+    networks:
+     - mynetwork
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_DEFAULT_PORT}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    container_name: app
+    image: app
+    restart: always
+    build: .
+    networks:
+      - mynetwork
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+      - ./logs:/usr/src/app/logs
+      - ./error-logs:/usr/src/app/error-logs
+    depends_on:
+      - postgres
+
+networks:
+  mynetwork:
+   driver: bridge
+
+volumes:
+  db-data:

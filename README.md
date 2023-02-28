@@ -44,7 +44,14 @@ npm run docker:stop
 After starting the application, open a new terminal window and enter:
 
 ```
-npm run docker:test
+npm run docker:test:auth
+```
+
+Or you can install all dependencies locally and run the tests outside the container:
+
+```
+npm install
+npm run test:auth
 ```
 
 ## Check codestyle

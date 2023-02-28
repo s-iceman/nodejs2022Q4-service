@@ -79,33 +79,30 @@ export class UserService {
     if (!uuid.validate(id)) {
       throw new InvalidUuid();
     }
-    try {
-      const user = await this.db.user.findUnique({
-        where: { id },
-        select: { password: true, version: true },
-      });
-      if (!user) {
-        throw new UserNotFound();
-      }
 
-      const isEqual = isPasswordsEqual(
-        updatePasswordDto.oldPassword,
-        user.password,
-      );
-      if (!isEqual) {
-        throw new WrongPassword();
-      }
-
-      const updatedUser = await this.db.user.update({
-        where: { id },
-        data: {
-          password: await hashPassword(updatePasswordDto.newPassword),
-          version: ++user.version,
-        },
-      });
-      return { ...new User(updatedUser) };
-    } catch (err) {
-      throw err;
+    const user = await this.db.user.findUnique({
+      where: { id },
+      select: { password: true, version: true },
+    });
+    if (!user) {
+      throw new UserNotFound();
     }
+
+    const isEqual = await isPasswordsEqual(
+      updatePasswordDto.oldPassword,
+      user.password,
+    );
+    if (!isEqual) {
+      throw new WrongPassword();
+    }
+
+    const updatedUser = await this.db.user.update({
+      where: { id },
+      data: {
+        password: await hashPassword(updatePasswordDto.newPassword),
+        version: ++user.version,
+      },
+    });
+    return { ...new User(updatedUser) };
   }
 }
